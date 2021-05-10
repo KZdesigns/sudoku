@@ -21,7 +21,7 @@ class Tile
         #=> if value equals 0 to_s return " ", otherwise turns the value to a string and uses colorize method and pass the value of color method on line 11
     end
 
-    def value=(new_value)
+    def value=(new_value) # setter method for the value
         if given? #=> checking to see if the tile is given
             puts "Invalid move can't change a value of a given tile"
             #=> if it is puts message above
