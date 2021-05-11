@@ -1,4 +1,4 @@
-require "tile" #=> allows access to the tile class
+require_relative "tile" #=> allows access to the tile class
 
 class Board
     def self.empty_grid #=> default value for the grid
@@ -54,7 +54,7 @@ class Board
     def solved? #=> boolean for solving the sudoku puzzle
         rows.all? { |row| solved_set?(row) } && #=> check if all the rows have 1-9
         columns.all? { |col| solved_set?(col) } && #=> checking if all the cols have 1-9
-        sqaures.all? { |sqaure| solved_set?(sqaure) }
+        sqaures.all? { |sqaure| solved_set?(sqaure) } # => check if all sqaures have the numbers 1-9
     end
 
     def solved_set?(tiles) #=> boolean to see if the the set of tiles is solved
@@ -62,21 +62,35 @@ class Board
         nums.sort == (1..9).to_a #=> comparing the array of nums (tiles) to [1,2,3,4,5,6,7,8,9]
     end
 
-    def sqaure(idx)
+    def sqaure(idx) #=> method for creating squares
+        tiles = [] #=> creating an empty array to hold the tiles that make up sqaure
+        x = (idx / 3) * 3 #=> setting x variable to represent the square moving across
+        y = (idx % 3) * 3 #=> setting y variable to represent the different square heights
 
+        (x...x + 3).each do |i| #=> looping through all the possible horizontal tiles in the square
+            (y...y + 3).each do |j| #=> looping through the possible veritcal value tiles in the square
+                tiles << self[[i,j]] #=> adding the cordinates of the grid into the tiles array holding to create a square
+            end
+        end
+
+        tiles #=> returning the tiles array or square
     end
 
-    def sqaures
-
+    def sqaures #=> method for creating all the square in on the board
+        (0..8).to_a.map { |i| sqaure(i) } #=> maping the different squares on the board
     end
 
-    def dup
+    def dup #=> making a copy of the grid
+        duped_grid = grid.map do |row| #=> looping the each row of the grid
+            row.map { |tile| Tile.new(tile.value) } #=> mapping each tile to a new tile
+        end
 
+        Board.new(duped_grid) #=> creating a new board with the copied values
     end
 
     private
 
-    attr_reader :grid
+    attr_reader :grid #=> giving read only access to the grid instance variable
 end
 
    
@@ -90,3 +104,5 @@ end
 #  [0, 0, 2, 6, 0, 9, 5, 0, 0],
 #  [8, 0, 0, 2, 0, 3, 0, 0, 9],
 #  [0, 0, 5, 0, 1, 0, 3, 0, 0]]
+
+
